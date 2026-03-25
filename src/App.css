@@ -1,42 +1,257 @@
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.App {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  font-family: sans-serif;
+  background-color: white;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+body {
+  margin: 0;
+  padding: 0;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Sidebar {
+  height: 100%;
+  width: 350px;
+  background-color: whitesmoke;
+  border-right: 1px solid #efefef;
+  padding: 20px 10px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.SidebarList {
+  width: 100%;
+  padding: 0;
+  list-style-type: none;
 }
 
-.card {
-  padding: 2em;
+.SidebarList .row {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #1a1a1a;
+  border-radius: 10px;
+  margin-bottom: 5px;
 }
 
-.read-the-docs {
-  color: #888;
+.SidebarList .row:hover {
+  background-color: rgb(234, 234, 234);
+}
+
+/* .SidebarList .row.active {
+  background-color: #f5f6f7;
+}
+
+.SidebarList .row.active #icon {
+  color: #7c3aed;
+}
+
+.SidebarList .row.active #title {
+  font-weight: bold;
 } */
+
+.SidebarList .row #icon {
+  flex: 30%;
+  display: grid;
+  place-items: center;
+}
+
+.SidebarList .row #icon svg {
+  font-size: 25px;
+}
+
+.SidebarList .row #title {
+  flex: 70%;
+  font-size: 18px;
+}
+
+.Navbar {
+  height: 60px;
+  width: 100%;
+  background-color: white;
+  border-bottom: 1px solid #efefef;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.Navbar .icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.MainLayout {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  font-family: sans-serif;
+  background-color: white;
+}
+
+/* Explore Page Styles */
+.explore {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.explore-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  width: 100%;
+  max-width: 935px;
+}
+
+.explore-item {
+  position: relative;
+  cursor: pointer;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.explore-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.explore-item .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.explore-item:hover .overlay {
+  opacity: 1;
+}
+
+.overlay-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Feed Page Styles */
+.feed {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stories {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+}
+
+.story {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.story span {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.posts {
+  width: 100%;
+  max-width: 470px;
+}
+
+.post {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #efefef;
+  padding-bottom: 20px;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.post-header-name {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.post-header-time {
+  color: gray;
+  font-size: 12px;
+}
+
+.post-image {
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.post-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.post-actions-left {
+  display: flex;
+  gap: 15px;
+}
+
+.post-actions svg {
+  cursor: pointer;
+}
+
+.post-info {
+  font-size: 14px;
+}
+
+.post-likes {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.post-caption-user {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.post-comments {
+  color: gray;
+  margin-top: 5px;
+  cursor: pointer;
+}
