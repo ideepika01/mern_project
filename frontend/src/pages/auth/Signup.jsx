@@ -1,26 +1,35 @@
 import React, { useState } from "react";
-import { TextField, Button, Paper, Divider } from "@mui/material";
-import { Link } from "react-router-dom";
+import { TextField, Button, Paper, Divider, Alert } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { register } from "../../api";
 
 function Signup() {
   const [formData, setFormData] = useState({
     email: "",
-    fullName: "",
     username: "",
     password: "",
   });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    console.log(formData);
-    // Add signup logic here
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      await register(formData);
+      navigate("/login");
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,25 +44,17 @@ function Signup() {
           Sign up to see photos and videos from your friends.
         </p>
 
-        <div className="w-full flex flex-col gap-2">
+        {error && <Alert severity="error" className="w-full mb-4 !text-xs">{error}</Alert>}
+
+        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-2">
           <TextField
             fullWidth
             size="small"
             label="Email"
             name="email"
             variant="outlined"
+            required
             value={formData.email}
-            onChange={handleChange}
-            className="!bg-gray-50/50"
-            sx={{ "& .MuiOutlinedInput-root": { borderRadius: 1 } }}
-          />
-          <TextField
-            fullWidth
-            size="small"
-            label="Full Name"
-            name="fullName"
-            variant="outlined"
-            value={formData.fullName}
             onChange={handleChange}
             className="!bg-gray-50/50"
             sx={{ "& .MuiOutlinedInput-root": { borderRadius: 1 } }}
@@ -64,6 +65,7 @@ function Signup() {
             label="Username"
             name="username"
             variant="outlined"
+            required
             value={formData.username}
             onChange={handleChange}
             className="!bg-gray-50/50"
@@ -76,6 +78,7 @@ function Signup() {
             name="password"
             variant="outlined"
             type="password"
+            required
             value={formData.password}
             onChange={handleChange}
             className="!bg-gray-50/50"
@@ -87,14 +90,15 @@ function Signup() {
           </p>
 
           <Button
+            type="submit"
             variant="contained"
             fullWidth
-            onClick={handleSubmit}
+            disabled={loading}
             className="!bg-pink-600 !py-1.5 !font-bold !normal-case !shadow-none !mt-2"
           >
-            Sign Up
+            {loading ? "Signing up..." : "Sign Up"}
           </Button>
-        </div>
+        </form>
       </Paper>
 
       <Paper elevation={0} className="w-full max-w-[350px] p-5 mt-3 border border-gray-200 bg-white text-center text-sm">
@@ -102,17 +106,10 @@ function Signup() {
           Have an account? <Link to="/login" className="text-pink-600 font-bold ml-1 hover:underline">Log in</Link>
         </p>
       </Paper>
-
-      <div className="mt-5 flex flex-col items-center gap-4">
-        <p className="text-sm text-gray-800">Get the app.</p>
-        <div className="flex gap-2 h-10">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Play Store" className="h-full cursor-pointer" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" className="h-full cursor-pointer" />
-        </div>
-      </div>
     </div>
   );
 }
 
 export default Signup;
+
 

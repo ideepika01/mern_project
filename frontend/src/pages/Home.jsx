@@ -1,48 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Stories from "../components/Stories";
 import Post from "../components/Post";
-
-// --- MOCK DATA ---
-const STORIES = [
-  { id: 1, name: "deepika", image: "https://img.freepik.com/free-photo/cascade-boat-clean-china-natural-rural_1417-1356.jpg" },
-  { id: 2, name: "rehana", image: "https://img.freepik.com/free-photo/cascade-boat-clean-china-natural-rural_1417-1356.jpg" },
-  { id: 3, name: "anu", image: "https://img.freepik.com/free-photo/cascade-boat-clean-china-natural-rural_1417-1356.jpg" },
-  { id: 4, name: "narayan", image: "https://img.freepik.com/free-photo/cascade-boat-clean-china-natural-rural_1417-1356.jpg" },
-  { id: 5, name: "aswin", image: "https://img.freepik.com/free-photo/cascade-boat-clean-china-natural-rural_1417-1356.jpg" },
-];
-
-const FEED_DATA = [
-  {
-    id: 1,
-    user: "deepika_iyy",
-    postImage: "https://img.freepik.com/free-photo/cascade-boat-clean-china-natural-rural_1417-1356.jpg",
-    caption: "Capturing the serene moments of nature 🌿✨",
-    likes: 1245,
-    comments: 42,
-    time: "2 HOURS AGO",
-  },
-  {
-    id: 2,
-    user: "adventure_seeker",
-    postImage: "https://img.freepik.com/free-photo/cascade-boat-clean-china-natural-rural_1417-1356.jpg",
-    caption: "Sunlight and Silence. Weekend getaway.",
-    likes: 8500,
-    comments: 156,
-    time: "5 HOURS AGO",
-  },
-];
+import { fetchPosts } from "../api";
 
 function Home() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Function to load all posts when the page opens
+  const loadPosts = async () => {
+    try {
+      const response = await fetchPosts();
+      setPosts(response.data);
+    } catch (error) {
+      console.error("Failed to load posts:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // useEffect runs once when the component mounts
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
   return (
     <div className="flex flex-col items-center gap-8 py-4 px-2">
-      {/* Stories */}
-      <Stories stories={STORIES} />
+      {/* 1. Top Section: Stories Bar */}
+      <Stories />
 
-      {/* Posts */}
+      {/* 2. Main Section: List of Posts */}
       <div className="w-full max-w-[500px] flex flex-col gap-6">
-        {FEED_DATA.map((post) => (
-          <Post key={post.id} post={post} />
-        ))}
+        {loading ? (
+          <p className="text-center py-10 text-gray-400">Loading home feed...</p>
+        ) : (
+          posts.map((singlePost) => (
+            <Post 
+              key={singlePost._id} 
+              post={singlePost} 
+            />
+          ))
+        )}
+        
+        {!loading && posts.length === 0 && (
+          <p className="text-center py-10 text-gray-400">No posts available. Be the first to post!</p>
+        )}
       </div>
     </div>
   );

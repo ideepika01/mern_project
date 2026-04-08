@@ -7,45 +7,59 @@ import Profile from "../pages/Profile";
 import Messages from "../pages/Messages";
 import Notifications from "../pages/Notifications";
 import Create from "../pages/Create";
+import Login from "../pages/auth/Login";
+import Signup from "../pages/auth/Signup";
 
+
+import ProtectedRoute from "../components/ProtectedRoute";
 
 function AppRouter() {
+    const profile = localStorage.getItem('profile');
+
     return (
         <Routes>
+            <Route path="/login" element={profile ? <Navigate to="/home" /> : <Login />} />
+            <Route path="/signup" element={profile ? <Navigate to="/home" /> : <Signup />} />
             <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/home" element={
-                <MainLayout>
-                    <Home />
-                </MainLayout>
+                <ProtectedRoute>
+                    <MainLayout><Home /></MainLayout>
+                </ProtectedRoute>
             } />
             <Route path="/explore" element={
-                <MainLayout>
-                    <Explore />
-                </MainLayout>
+                <ProtectedRoute>
+                    <MainLayout><Explore /></MainLayout>
+                </ProtectedRoute>
             } />
             <Route path="/notifications" element={
-                <MainLayout>
-                    <Notifications />
-                </MainLayout>
+                <ProtectedRoute>
+                    <MainLayout><Notifications /></MainLayout>
+                </ProtectedRoute>
+            } />
+            <Route path="/profile/:username" element={
+                <ProtectedRoute>
+                    <MainLayout><Profile /></MainLayout>
+                </ProtectedRoute>
             } />
             <Route path="/profile" element={
-                <MainLayout>
-                    <Profile />
-                </MainLayout>
+                <ProtectedRoute>
+                    <MainLayout><Profile /></MainLayout>
+                </ProtectedRoute>
             } />
             <Route path="/messages" element={
-                <MainLayout>
-                    <Messages />
-                </MainLayout>
+                <ProtectedRoute>
+                    <MainLayout><Messages /></MainLayout>
+                </ProtectedRoute>
             } />
             <Route path="/create" element={
-                <MainLayout>
-                    <Create />
-                </MainLayout>
+                <ProtectedRoute>
+                    <MainLayout><Create /></MainLayout>
+                </ProtectedRoute>
             } />
         </Routes>
     );
 }
+
 
 
 export default AppRouter;

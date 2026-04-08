@@ -1,40 +1,38 @@
 import React from "react";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import { Badge, Avatar, IconButton } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+  const navigate = useNavigate();
+  const profile = JSON.parse(localStorage.getItem('profile'))?.user;
+
   return (
-    <header className="h-16 flex items-center justify-between px-6 bg-white border-b border-gray-100 sticky top-0 z-50">
-      {/* Search Bar */}
-      <div className="relative w-full max-w-[400px]">
-        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-          <SearchIcon className="text-gray-400" sx={{ fontSize: 18 }} />
-        </div>
-        <input
-          type="text"
-          placeholder="Search Sentigram..."
-          className="block w-full py-2.5 pl-11 pr-4 bg-gray-100/60 border-none rounded-full text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-100 transition-all duration-200"
-        />
-      </div>
+    <header className="h-16 flex items-center justify-between px-4 md:px-6 bg-white border-b border-gray-100 sticky top-0 z-50">
+      {/* Logo - Mobile only */}
+      <h1 className="text-xl font-bold tracking-tighter sentigram-gradient md:hidden" onClick={() => navigate('/home')}>
+        Sentigram
+      </h1>
+
+      {/* Spacing for desktop if no search bar */}
+      <div className="hidden md:block flex-1"></div>
 
       {/* Action Icons */}
-      <div className="flex items-center gap-4">
-        <IconButton className="hover:bg-gray-50 p-2">
+      <div className="flex items-center gap-2 md:gap-4">
+        <IconButton className="hover:bg-gray-50 p-2" onClick={() => navigate('/notifications')}>
           <Badge color="error" variant="dot" overlap="circular">
             <NotificationsNoneOutlinedIcon className="text-gray-700" />
           </Badge>
         </IconButton>
         
-        <div className="flex items-center gap-3 pl-2 border-l border-gray-100 cursor-pointer group">
-          <div className="text-right hidden sm:block">
-            <p className="text-sm font-bold text-gray-800 group-hover:text-pink-600 transition-colors">Deepika I.</p>
-            <p className="text-[10px] text-gray-500 font-medium">@deepika_iyy</p>
-          </div>
+        <div 
+          className="flex items-center gap-2 md:gap-3 pl-2 border-l border-gray-100 cursor-pointer group"
+          onClick={() => navigate(`/profile/${profile?.username}`)}
+        >
           <Avatar
-            alt="User Profile"
-            src="https://mui.com/static/images/avatar/1.jpg"
-            className="w-9 h-9 border-2 border-transparent group-hover:border-pink-200 transition-all duration-200"
+            alt="User"
+            src={profile?.profilePic || "https://mui.com/static/images/avatar/1.jpg"}
+            className="w-8 h-8 md:w-9 md:h-9 border-2 border-transparent group-hover:border-pink-200"
           />
         </div>
       </div>

@@ -56,10 +56,21 @@ function Sidebar() {
         </List>
       </nav>
       
-      <div className="p-4 border-t border-gray-50">
-        <div className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
-          <div className="w-8 h-8 rounded-full bg-gray-200"></div>
-          <span className="text-sm font-semibold text-gray-700">Settings</span>
+      <div className="p-4 border-t border-gray-50 flex flex-col gap-2">
+        <div className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors" onClick={() => navigate(`/profile/${JSON.parse(localStorage.getItem('profile'))?.user?.username}`)}>
+          <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-200">
+            <img src={JSON.parse(localStorage.getItem('profile'))?.user?.profilePic || "https://img.freepik.com/free-photo/cascade-boat-clean-china-natural-rural_1417-1356.jpg"} className="w-full h-full object-cover" />
+          </div>
+          <span className="text-sm font-semibold text-gray-700 truncate">{JSON.parse(localStorage.getItem('profile'))?.user?.username || "Account"}</span>
+        </div>
+        <div 
+          className="flex items-center gap-3 px-3 py-2 rounded-xl text-red-500 hover:bg-red-50 cursor-pointer transition-colors"
+          onClick={() => {
+            localStorage.removeItem('profile');
+            navigate('/login');
+          }}
+        >
+          <span className="text-sm font-bold">Log Out</span>
         </div>
       </div>
     </aside>
