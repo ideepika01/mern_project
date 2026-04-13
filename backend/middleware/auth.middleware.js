@@ -1,15 +1,26 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
+// Verify token middleware
 const auth = (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(401).json({ message: 'Authentication required' });
+    const header = req.headers.authorization;
 
-    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decodedData;
+    // Check header exists
+    if (!header || !header.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
+    const token = header.split(" ")[1];
+
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Attach user id to request
+    req.user = { id: decoded.id };
+
     next();
-  } catch (error) {
-    res.status(401).json({ message: 'Invalid or expired token' });
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" });
   }
 };
 

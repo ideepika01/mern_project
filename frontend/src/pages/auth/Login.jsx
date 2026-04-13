@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { TextField, Button, Paper, Divider, Alert } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import FacebookIcon from '@mui/icons-material/Facebook';
-import { login } from "../../api";
+import axios from "../../api";
 
+// Login Page Component
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
@@ -20,7 +21,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const { data } = await login(formData);
+      const { data } = await axios.post("/auth/login", formData);
       localStorage.setItem("profile", JSON.stringify(data));
       navigate("/home");
     } catch (err) {
@@ -29,6 +30,7 @@ function Login() {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50/50 p-4">

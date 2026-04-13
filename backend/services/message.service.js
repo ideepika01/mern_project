@@ -1,30 +1,34 @@
-const Message = require('../models/Message');
-const User = require('../models/User');
+const Message = require("../models/Message");
+const User = require("../models/User");
 
+// Get all messages between two users
 const getChatMessages = async (userId, otherUserId) => {
-  return await Message.find({
+  return Message.find({
     $or: [
       { sender: userId, receiver: otherUserId },
-      { sender: otherUserId, receiver: userId },
-    ],
-  }).sort({ createdAt: 1 });
+      { sender: otherUserId, receiver: userId }
+    ]
+  }).sort({ createdAt: 1 }); // oldest first
 };
 
+// Get all users the current user has chatted with
 const getConversations = async (userId) => {
-  const sentMessages = await Message.find({ sender: userId }).distinct('receiver');
-  const receivedMessages = await Message.find({ receiver: userId }).distinct('sender');
-  
-  const userIds = [...new Set([...sentMessages, ...receivedMessages])];
-  return await User.find({ _id: { $in: userIds } }).select('username profilePic');
+  const sent = await Message.find({ sender: userId }).distinct("receiver");
+  const received = await Message.find({ receiver: userId }).distinct("sender");
+
+  const userIds = [...new Set([...sent, ...received])]; // remove duplicates
+
+  return User.find({ _id: { $in: userIds } })
+    .select("username profilePic");
 };
 
-const createMessage = async (messageData) => {
-  return await Message.create(messageData);
+// Create a new message
+const createMessage = async (data) => {
+  return Message.create(data);
 };
 
 module.exports = {
   getChatMessages,
   getConversations,
-  createMessage,
+  createMessage
 };
-

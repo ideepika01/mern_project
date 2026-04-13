@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { TextField, Button, Paper, Divider, Alert } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { register } from "../../api";
+import axios from "../../api";
 
+// Signup Page Component
 function Signup() {
   const [formData, setFormData] = useState({
     email: "",
@@ -23,7 +24,7 @@ function Signup() {
     setLoading(true);
 
     try {
-      const { data } = await register(formData);
+      const { data } = await axios.post("/auth/register", formData);
       localStorage.setItem("profile", JSON.stringify(data));
       navigate("/home");
     } catch (err) {
@@ -32,6 +33,7 @@ function Signup() {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50/50 p-4">

@@ -1,46 +1,62 @@
-const Post = require('../models/Post');
+const Post = require("../models/Post");
 
+// Get latest posts
 const getAllPosts = async () => {
-  return await Post.find().populate('user', 'username profilePic').sort({ createdAt: -1 }).limit(10);
+  return Post.find()
+    .populate("user", "username profilePic")
+    .sort({ createdAt: -1 })
+    .limit(10);
 };
 
-const createPost = async (postData) => {
-  return await Post.create(postData);
+// Create new post
+const createPost = async (data) => {
+  return Post.create(data);
 };
 
+// Explore posts (same as all posts for now)
 const getExplorePosts = async () => {
-  return await Post.find().populate('user', 'username profilePic').sort({ createdAt: -1 }).limit(10);
+  return getAllPosts(); // reuse instead of duplicate code
 };
 
+// Like / Unlike post
 const likePost = async (postId, userId) => {
   const post = await Post.findById(postId);
-  if (!post) throw new Error('Post not found');
-  
-  const index = post.likes.findIndex((id) => id.toString() === userId.toString());
-  if (index === -1) {
-    post.likes.push(userId);
+  if (!post) throw new Error("Post not found");
+
+  const hasLiked = post.likes.includes(userId);
+
+  if (hasLiked) {
+    post.likes = post.likes.filter(id => id.toString() !== userId.toString());
   } else {
-    post.likes = post.likes.filter((id) => id.toString() !== userId.toString());
+    post.likes.push(userId);
   }
-  
-  return await Post.findByIdAndUpdate(postId, post, { new: true }).populate('user', 'username profilePic');
+
+  await post.save(); // simpler than findByIdAndUpdate
+
+  return post.populate("user", "username profilePic");
 };
 
+// Add comment
 const commentPost = async (postId, comment) => {
   const post = await Post.findById(postId);
-  if (!post) throw new Error('Post not found');
-  
+  if (!post) throw new Error("Post not found");
+
   post.comments.push(comment);
-  
-  return await Post.findByIdAndUpdate(postId, post, { new: true }).populate('user', 'username profilePic');
+  await post.save();
+
+  return post.populate("user", "username profilePic");
 };
 
+// Delete post (only owner)
 const deletePost = async (postId, userId) => {
   const post = await Post.findById(postId);
-  if (!post) throw new Error('Post not found');
-  if (post.user.toString() !== userId.toString()) throw new Error('Unauthorized');
-  
-  return await Post.findByIdAndDelete(postId);
+  if (!post) throw new Error("Post not found");
+
+  if (post.user.toString() !== userId.toString()) {
+    throw new Error("Unauthorized");
+  }
+
+  return Post.findByIdAndDelete(postId);
 };
 
 module.exports = {
@@ -49,5 +65,5 @@ module.exports = {
   getExplorePosts,
   likePost,
   commentPost,
-  deletePost,
+  deletePost
 };

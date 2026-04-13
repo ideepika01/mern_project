@@ -1,71 +1,60 @@
 # Home Page Flow Checklist
 
-<!-- 1. Home page loads -->
+<!-- 1. Data Fetching -->
 
 frontend/src/pages/Home.jsx
   └── useEffect()
-        └── loadPosts()
-              ├── api.fetchPosts() → src/api/index.js
-              └── GET /api/posts
+        └── axios.get('/posts') → imported from frontend/src/api/index.js
+
+frontend/src/api/index.js
+  └── axios = lib.create({ baseURL: '...' }) → Configured instance
+
+<!-- 2. Backend Processing -->
 
 backend/routers/post.routers.js
-  └── router.get('/', getPosts)
+  └── router.get('/', auth, getPosts)
 
 backend/controllers/post.controller.js
   └── getPosts()
-        ├── Post.find() → database query
-        ├── .populate('user', 'username profilePic')
-        ├── .sort({ createdAt: -1 })
-        ├── .limit(10)
-        └── returns Array of Posts (200)
+        ├── Post.find() → retrieves latest posts
+        ├── .populate('user', 'username profilePic') → fetches author details
+        ├── .sort({ createdAt: -1 }) → newest first
+        └── res.json(posts) → returns array of posts
+
+
+<!-- 3. Frontend Rendering -->
 
 frontend/src/pages/Home.jsx
-  └── setPosts(data)
-        └── render <Post /> components
+  └── setPosts(res.data) → updates state with fetched posts
+  └── posts.map()
+        └── <Post key={post._id} post={post} /> → renders each post component
 
 
-<!-- 2. Post Interaction: Like -->
 
-frontend/src/components/Post.jsx
-  └── handleLikeAction()
-        └── api.likePost(id) → src/api/index.js
-              └── POST /api/posts/:id/like
 
-backend/routers/post.routers.js
-  └── router.post('/:id/like', auth, likePost)
 
-backend/controllers/post.controller.js
-  └── likePost()
-        ├── find post by ID
-        ├── check if likes.includes(userId)
-        ├── if yes → remove (unlike)
-        ├── if no → push (like)
-        ├── post.save()
-        └── returns Updated Post object (200)
-
-frontend/src/components/Post.jsx
-  └── setLikes(data.likes) → UI updates heart icon
 
 
 
 User opens Home page
 ↓
-React component loads
+useEffect hook triggers automatically
 ↓
-useEffect triggers API
+axios.get('/posts') API called
+
 ↓
-GET /posts request sent
+Request hits Backend /api/posts
 ↓
-Express router receives request
+Auth middleware verifies JWT
 ↓
-Controller runs
+Controller queries MongoDB for latest posts
 ↓
-Service queries database
+MongoDB populates User data (username, avatar)
 ↓
-MongoDB returns posts
+Data sent back to Frontend as JSON
 ↓
-Controller sends JSON response
+posts state is updated
 ↓
-Frontend stores posts in state
+React re-renders the feed
 ↓
-React renders feed
+User sees the dynamic post list

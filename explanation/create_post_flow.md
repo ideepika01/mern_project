@@ -14,7 +14,7 @@ frontend/src/pages/Create.jsx → #ShareButton
         ├── new FormData()
         ├── formData.append("image", file)
         ├── formData.append("caption", caption)
-        └── POST /api/posts
+        └── axios.post('/posts', formData)
 
 backend/routers/post.routers.js
   └── router.post('/', auth, upload.single('image'), createPost)
@@ -26,6 +26,7 @@ backend/controllers/post.controller.js
         ├── req.file.filename → constructs local URL
         ├── Post.create()     → save to DB
         └── returns New Post object (201)
+
 
 frontend/src/pages/Create.jsx
   └── navigate("/home") → User sees their new post

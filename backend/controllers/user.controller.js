@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Post = require('../models/Post');
 
 // Get a user's profile and their posts
+// Get User Profile
 const getUserProfile = async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username })
@@ -21,6 +22,7 @@ const getUserProfile = async (req, res) => {
 };
 
 // Update profile details like username, bio, and profile picture
+// Update Profile
 const updateProfile = async (req, res) => {
   try {
     const { username, bio, profilePic } = req.body;
@@ -39,6 +41,7 @@ const updateProfile = async (req, res) => {
 };
 
 // Search for users by username
+// Search Users
 const searchUsers = async (req, res) => {
   try {
     const query = req.query.q;
@@ -54,6 +57,7 @@ const searchUsers = async (req, res) => {
 };
 
 // Follow or Unfollow a user
+// Follow User
 const followUser = async (req, res) => {
   try {
     const currentUserId = req.user.id;
@@ -96,6 +100,7 @@ const followUser = async (req, res) => {
 };
 
 // Save or Unsave a post
+// Save Post
 const savePost = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
