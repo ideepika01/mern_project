@@ -23,8 +23,9 @@ function Signup() {
     setLoading(true);
 
     try {
-      await register(formData);
-      navigate("/login");
+      const { data } = await register(formData);
+      localStorage.setItem("profile", JSON.stringify(data));
+      navigate("/home");
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong. Please try again.");
     } finally {
@@ -39,7 +40,7 @@ function Signup() {
         <h1 className="text-3xl font-bold tracking-tighter mb-6 bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] bg-clip-text text-transparent">
           Sentigram
         </h1>
-        
+
         <p className="text-[13px] font-bold text-gray-400 text-center mb-6 px-2">
           Sign up to see photos and videos from your friends.
         </p>

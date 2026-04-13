@@ -33,9 +33,6 @@ export const fetchPosts = () => API.get('/posts');
 export const createPost = (newPost) => API.post('/posts', newPost);
 export const fetchExplorePosts = () => API.get('/posts/explore');
 export const fetchUserProfile = (username) => API.get(`/users/profile/${username}`);
-export const fetchConversations = (userId) => API.get(`/messages/conversations/${userId}`);
-export const fetchMessages = (userId, otherUserId) => API.get(`/messages/${userId}/${otherUserId}`);
-export const sendMessage = (messageData) => API.post('/messages', messageData);
 export const likePost = (id) => API.patch(`/posts/${id}/like`);
 export const commentPost = (id, comment) => API.post(`/posts/${id}/comment`, { text: comment });
 export const deletePost = (id) => API.delete(`/posts/${id}`);
@@ -49,5 +46,10 @@ export const updateProfile = (formData) => API.put('/users/update', formData);
 export const savePost = (postId) => API.patch(`/users/save/${postId}`);
 export const searchUsers = (query) => API.get(`/users/search?q=${query}`);
 export const followUser = (userId) => API.patch(`/users/follow/${userId}`);
+
+// Messages
+export const fetchConversations = () => API.get('/messages/conversations');
+export const fetchMessages = (id) => API.get(`/messages/${id}`);
+export const startConversation = (recipientId) => API.post('/messages/start', { recipientId });
 
 export default API;

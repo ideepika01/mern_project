@@ -12,7 +12,7 @@ function BottomNav() {
   );
 
   return (
-    <div className="flex justify-around items-center h-14 w-full">
+    <div className="flex justify-around items-center h-14 w-full px-4">
       {mobileItems.map((item) => {
         const active = location.pathname === item.link;
         return (

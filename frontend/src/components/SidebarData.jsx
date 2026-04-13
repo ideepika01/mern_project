@@ -1,11 +1,9 @@
 import react from "react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 
 export const SidebarData = [
   {
@@ -19,29 +17,18 @@ export const SidebarData = [
     link: "/explore",
   },
   {
-    title: "Notifications",
-    icon: <NotificationsNoneOutlinedIcon />,
-    link: "/notifications",
-  },
-  {
-    title: "Messages",
-    icon: <ChatBubbleOutlineOutlinedIcon />,
-    link: "/messages",
-  },
-  {
     title: "Create",
     icon: <AddBoxOutlinedIcon />,
     link: "/create",
+  },
+  {
+    title: "Messages",
+    icon: <ChatOutlinedIcon />,
+    link: "/messages",
   },
   {
     title: "Profile",
     icon: <AccountCircleOutlinedIcon />,
     link: "/profile",
   },
-  {
-    title: "Settings",
-    icon: <SettingsOutlinedIcon />,
-    link: "/settings",
-  },
 ];
-

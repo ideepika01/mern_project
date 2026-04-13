@@ -27,8 +27,17 @@ const register = async (req, res) => {
       password: hashedPassword,
     });
 
-    // 4. Return token
-    res.status(201).json({ token: generateToken(user._id) });
+    // 4. Return user data and token
+    res.status(201).json({ 
+      token: generateToken(user._id),
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        profilePic: user.profilePic,
+        saved: user.saved || []
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
