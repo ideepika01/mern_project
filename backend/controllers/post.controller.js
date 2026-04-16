@@ -59,26 +59,6 @@ const likePost = async (req, res) => {
   }
 };
 
-// Comment
-const commentPost = async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ message: "Post not found" });
-
-    post.comments.push({
-      user: req.user.id,
-      text: req.body.text
-    });
-
-    await post.save();
-    await post.populate("user", "username profilePic");
-
-    res.status(201).json(post);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
 // Delete post
 const deletePost = async (req, res) => {
   try {
@@ -102,6 +82,5 @@ module.exports = {
   getExplorePosts,
   createPost,
   likePost,
-  commentPost,
   deletePost
 }

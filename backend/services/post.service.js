@@ -36,17 +36,6 @@ const likePost = async (postId, userId) => {
   return post.populate("user", "username profilePic");
 };
 
-// Add comment
-const commentPost = async (postId, comment) => {
-  const post = await Post.findById(postId);
-  if (!post) throw new Error("Post not found");
-
-  post.comments.push(comment);
-  await post.save();
-
-  return post.populate("user", "username profilePic");
-};
-
 // Delete post (only owner)
 const deletePost = async (postId, userId) => {
   const post = await Post.findById(postId);
@@ -64,6 +53,5 @@ module.exports = {
   createPost,
   getExplorePosts,
   likePost,
-  commentPost,
   deletePost
 };
